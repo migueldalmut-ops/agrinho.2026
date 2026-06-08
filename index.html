@@ -4,105 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agricultura Familiar</title>
+
 <style>
-    /* Fundo verde e azul */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: linear-gradient(to bottom, #a8e6cf, #d0f0fd);
-        overflow-x: hidden;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-    header {
-        background-color: #4CAF50; /* verde */
-        color: white;
-        text-align: center;
-        padding: 20px;
-        font-size: 2em;
-    }
+body{
+    background: linear-gradient(180deg,#4CAF50,#87CEEB);
+    min-height:100vh;
+    color:#033;
+}
 
-    section {
-        margin: 20px;
-        padding: 20px;
-        background-color: rgba(255,255,255,0.8);
-        border-radius: 10px;
-    }
+header{
+    text-align:center;
+    padding:30px;
+    background:#0d47a1;
+    color:white;
+}
 
-    h2 {
-        color: #2E7D32;
-    }
+main{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
 
-    ul {
-        font-size: 1.1em;
-    }
+.card{
+    background:white;
+    margin:20px 0;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
 
-    .interactive-area {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        margin-top: 20px;
-    }
+h2{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
 
-    .element {
-        width: 120px;
-        margin: 10px;
-        cursor: pointer;
-        transition: transform 0.3s;
-    }
+ul{
+    padding-left:20px;
+}
 
-    .element:hover {
-        transform: scale(1.2) rotate(10deg);
-    }
+.fazenda{
+    position:relative;
+    background:#c8f7c5;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    overflow:hidden;
+}
 
-    /* Animação da vaca dançante */
-    @keyframes dance {
-        0%, 100% { transform: translateY(0) rotate(0deg);}
-        25% { transform: translateY(-10px) rotate(-10deg);}
-        50% { transform: translateY(10px) rotate(10deg);}
-        75% { transform: translateY(-10px) rotate(-10deg);}
-    }
+.itens{
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
 
-    .dancing-cow {
-        animation: dance 1s infinite;
-    }
+.item{
+    font-size:80px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.item:hover{
+    transform:scale(1.2);
+}
+
+/* Vaca dançando */
+@keyframes dancar{
+    0%{transform:rotate(-10deg);}
+    50%{transform:rotate(10deg);}
+    100%{transform:rotate(-10deg);}
+}
+
+.vaca{
+    animation:dancar 1s infinite;
+}
+
+/* Trator andando */
+@keyframes moverTrator{
+    from{transform:translateX(-50px);}
+    to{transform:translateX(50px);}
+}
+
+.trator{
+    animation:moverTrator 2s infinite alternate;
+}
+
+#mensagem{
+    margin-top:20px;
+    font-size:22px;
+    font-weight:bold;
+    color:#0d47a1;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    background:#0d47a1;
+    color:white;
+}
 </style>
 </head>
+
 <body>
 
-<header>Agricultura Familiar e Seus Benefícios</header>
+<header>
+    <h1>🌱 Agricultura Familiar 🌱</h1>
+    <p>Produzindo alimentos, cuidando da natureza e fortalecendo comunidades.</p>
+</header>
 
-<section>
+<main>
+
+<div class="card">
     <h2>O que é Agricultura Familiar?</h2>
-    <p>A agricultura familiar é aquela realizada por famílias que cultivam a terra para produzir alimentos e gerar renda. Ela fortalece comunidades, preserva tradições e contribui para o desenvolvimento sustentável.</p>
-</section>
+    <p>
+        A agricultura familiar é a produção agrícola realizada por famílias
+        rurais. Ela é responsável por grande parte dos alimentos consumidos
+        pela população e contribui para o desenvolvimento sustentável.
+    </p>
+</div>
 
-<section>
-    <h2>Benefícios</h2>
+<div class="card">
+    <h2>Benefícios da Agricultura Familiar</h2>
     <ul>
-        <li>Alimentos frescos e saudáveis</li>
-        <li>Preservação ambiental e biodiversidade</li>
-        <li>Geração de empregos locais</li>
-        <li>Fortalecimento da economia rural</li>
+        <li>🥬 Produção de alimentos frescos e saudáveis.</li>
+        <li>🌳 Preservação do meio ambiente.</li>
+        <li>👨‍🌾 Geração de emprego e renda no campo.</li>
+        <li>🏡 Fortalecimento das comunidades rurais.</li>
+        <li>🌎 Incentivo à sustentabilidade e biodiversidade.</li>
     </ul>
-</section>
+</div>
 
-<section>
-    <h2>Fazenda Interativa!</h2>
-    <p>Clique nos elementos para ver suas ações:</p>
-    <div class="interactive-area">
-        <!-- Trator -->
-        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Trator" class="element" onclick="alert('O trator está arando o campo! 🚜')">
-        
-        <!-- Milho -->
-        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Milho" class="element" onclick="alert('O milho está crescendo! 🌽')">
-        
-        <!-- Vaca dançante -->
-        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Vaca Dançante" class="element dancing-cow" onclick="alert('A vaca está dançando! 🐄💃')">
-        
-        <!-- Cachorro -->
-        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Cachorro" class="element" onclick="alert('O cachorro está correndo pelo campo! 🐶')">
+<div class="card fazenda">
+    <h2>🚜 Fazenda Interativa 🚜</h2>
+    <p>Clique nos personagens e elementos abaixo!</p>
+
+    <div class="itens">
+        <div class="item trator" onclick="mostrar('🚜 O trator está preparando a terra para o plantio!')">🚜</div>
+
+        <div class="item" onclick="mostrar('🌽 O milho está crescendo forte e saudável!')">🌽</div>
+
+        <div class="item vaca" onclick="mostrar('🐄💃 A vaca está dançando feliz na fazenda!')">🐄</div>
+
+        <div class="item" onclick="mostrar('🐶 O cachorro está cuidando da fazenda!')">🐶</div>
     </div>
-</section>
+
+    <div id="mensagem">
+        Clique em algum elemento!
+    </div>
+</div>
+
+</main>
+
+<footer>
+    🌱 Agricultura Familiar: alimento, sustentabilidade e qualidade de vida.
+</footer>
+
+<script>
+function mostrar(texto){
+    document.getElementById("mensagem").innerHTML = texto;
+}
+</script>
 
 </body>
 </html>
