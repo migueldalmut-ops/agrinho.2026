@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultura Familiar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #a8e6cf, #d0f0fd); /* verde e azul */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
+        header {
+            text-align: center;
+            background-color: #4CAF50; /* verde */
+            color: white;
+            padding: 20px 0;
+            font-size: 2em;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #2E7D32; /* verde escuro */
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .interactive-area {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .farm-animal, .tractor, .corn, .dog {
+            width: 100px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .farm-animal:hover, .tractor:hover, .corn:hover, .dog:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Animação da vaca dançante */
+        @keyframes dance {
+            0%, 100% { transform: translateY(0) rotate(0deg);}
+            25% { transform: translateY(-10px) rotate(-10deg);}
+            50% { transform: translateY(10px) rotate(10deg);}
+            75% { transform: translateY(-10px) rotate(-10deg);}
+        }
+
+        .dancing-cow {
+            animation: dance 1s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <header>Agricultura Familiar e Seus Benefícios</header>
+
+    <section>
+        <h2>O que é Agricultura Familiar?</h2>
+        <p>A agricultura familiar é aquela praticada por famílias que cultivam a terra, produzem alimentos e geram renda, mantendo tradições e contribuindo para a segurança alimentar. Ela fortalece comunidades, promove sustentabilidade e preserva o meio ambiente.</p>
+    </section>
+
+    <section>
+        <h2>Benefícios da Agricultura Familiar</h2>
+        <ul>
+            <li>Produção de alimentos frescos e saudáveis</li>
+            <li>Preservação da biodiversidade</li>
+            <li>Geração de empregos locais</li>
+            <li>Fortalecimento da economia rural</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Explore a Fazenda Interativa!</h2>
+        <p>Clique nos elementos para ver uma animação divertida:</p>
+        <div class="interactive-area">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Trator" class="tractor" onclick="alert('O trator está arando o campo! 🚜')">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Milho" class="corn" onclick="alert('O milho está crescendo! 🌽')">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Vaca Dançante" class="farm-animal dancing-cow" onclick="alert('A vaca está dançando! 🐄💃')">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Cachorro" class="dog" onclick="alert('O cachorro está correndo pelo campo! 🐶')">
+        </div>
+    </section>
+
+</body>
+</html>
