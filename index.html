@@ -3,432 +3,297 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agricultura Familiar - Mini Game</title>
+<title>Agricultura Familiar</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial, sans-serif;
-    background:#87CEEB;
     overflow:hidden;
+    font-family:Arial,sans-serif;
 }
 
-#game{
+#campo{
+    position:relative;
     width:100vw;
     height:100vh;
-    position:relative;
-    background:linear-gradient(#87CEEB 50%, #5cae4f 50%);
+    background:linear-gradient(#87CEEB 35%, #5cae4f 35%);
 }
 
 #trator{
     position:absolute;
-    width:80px;
-    height:50px;
     font-size:50px;
-    left:50px;
+    left:100px;
     top:300px;
-}
-
-.semente{
-    position:absolute;
-    font-size:25px;
+    z-index:100;
 }
 
 .planta{
     position:absolute;
-    font-size:30px;
+    font-size:24px;
 }
 
 #painel{
     position:absolute;
-    top:10px;
     left:10px;
+    top:10px;
     background:white;
-    padding:10px;
+    padding:12px;
     border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.3);
+    z-index:200;
 }
 
 #info{
     position:absolute;
     right:10px;
     top:10px;
-    width:320px;
+    width:350px;
     background:white;
     padding:10px;
     border-radius:10px;
     max-height:90vh;
     overflow:auto;
+    z-index:200;
 }
 
-h2{
-    margin-top:0;
+#mensagem{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    padding:10px;
+    border-radius:10px;
+    font-weight:bold;
+    display:none;
+    z-index:300;
 }
 </style>
 </head>
 <body>
 
-<div id="game">
+<div id="campo">
 
 <div id="painel">
-    <h3>🚜 Agricultura Familiar</h3>
-    <p>Pontos: <span id="pontos">0</span></p>
-    <p>Sementes Plantadas: <span id="plantadas">0</span></p>
-    <p>Use ↑ ↓ ← → para mover</p>
-    <p>Pressione ESPAÇO para plantar</p>
+<h2>🚜 Fazenda Familiar</h2>
+
+Pontos: <span id="pontos">0</span><br>
+Moedas: <span id="moedas">0</span><br>
+Nível: <span id="nivel">1</span><br>
+Plantas: <span id="plantas">0</span><br>
+Produção: <span id="producao">0</span> kg<br><br>
+
+<b>Controles</b><br>
+W = Cima<br>
+S = Baixo<br>
+A = Esquerda<br>
+D = Direita<br><br>
+
+O trator planta automaticamente!
 </div>
 
 <div id="info">
-    <h2>🌱 Informações</h2>
+<h2>🌱 Agricultura Familiar</h2>
 
-    <p><b>Agricultura Familiar</b> é responsável por grande parte dos alimentos consumidos pela população.</p>
+<p>
+A agricultura familiar é responsável por grande parte dos alimentos
+consumidos pela população.
+</p>
 
-    <ul>
-        <li>🥬 Produz verduras e legumes.</li>
-        <li>🌽 Cultiva milho e feijão.</li>
-        <li>🍅 Produz tomate e hortaliças.</li>
-        <li>🐄 Pode criar animais de pequeno porte.</li>
-        <li>💧 Utiliza recursos naturais de forma sustentável.</li>
-        <li>👨‍👩‍👧‍👦 Gera emprego para famílias rurais.</li>
-        <li>🌳 Ajuda na preservação ambiental.</li>
-        <li>🚜 O trator auxilia no preparo do solo e plantio.</li>
-    </ul>
+<ul>
+<li>🌽 Produção de milho.</li>
+<li>🍅 Produção de tomate.</li>
+<li>🥬 Hortaliças.</li>
+<li>🫘 Feijão.</li>
+<li>🥕 Legumes.</li>
+<li>🍓 Frutas.</li>
+<li>🐔 Criação de galinhas.</li>
+<li>🐄 Produção de leite.</li>
+<li>🌳 Preservação ambiental.</li>
+<li>💧 Uso consciente da água.</li>
+<li>♻️ Produção sustentável.</li>
+<li>👨‍🌾 Geração de empregos.</li>
+<li>🚜 Uso de tratores para aumentar a produtividade.</li>
+</ul>
 
-    <h3>Missão</h3>
-    <p>Ajude o agricultor a plantar o maior número possível de sementes para abastecer a comunidade.</p>
+<h3>Objetivo</h3>
+
+Produza mais de 500 kg de alimentos para abastecer a comunidade.
 </div>
+
+<div id="mensagem"></div>
 
 <div id="trator">🚜</div>
 
 </div>
 
 <script>
-const trator = document.getElementById("trator");
-const game = document.getElementById("game");
 
-let x = 50;
+const trator = document.getElementById("trator");
+const campo = document.getElementById("campo");
+
+let x = 100;
 let y = 300;
 
 let pontos = 0;
-let plantadas = 0;
+let moedas = 0;
+let nivel = 1;
+let totalPlantas = 0;
+let producao = 0;
 
-document.addEventListener("keydown", (e)=>{
+const teclas = {};
 
-    if(e.key === "ArrowRight") x += 15;
-    if(e.key === "ArrowLeft") x -= 15;
-    if(e.key === "ArrowUp") y -= 15;
-    if(e.key === "ArrowDown") y += 15;
+document.addEventListener("keydown", e=>{
+    teclas[e.key.toLowerCase()] = true;
+});
+
+document.addEventListener("keyup", e=>{
+    teclas[e.key.toLowerCase()] = false;
+});
+
+function atualizar(){
+
+    const velocidade = 4;
+
+    if(teclas["w"]) y -= velocidade;
+    if(teclas["s"]) y += velocidade;
+    if(teclas["a"]) x -= velocidade;
+    if(teclas["d"]) x += velocidade;
 
     if(x < 0) x = 0;
     if(y < 150) y = 150;
-    if(x > window.innerWidth - 100) x = window.innerWidth - 100;
-    if(y > window.innerHeight - 80) y = window.innerHeight - 80;
 
-    trator.style.left = x + "px";
-    trator.style.top = y + "px";
+    if(x > window.innerWidth-70)
+        x = window.innerWidth-70;
 
-    if(e.code === "Space"){
-        plantar();
-    }
-});
+    if(y > window.innerHeight-70)
+        y = window.innerHeight-70;
 
-function plantar(){
+    trator.style.left = x+"px";
+    trator.style.top = y+"px";
 
-    const semente = document.createElement("div");
-    semente.className = "semente";
-    semente.innerHTML = "🌱";
-
-    semente.style.left = (x+25)+"px";
-    semente.style.top = (y+25)+"px";
-
-    game.appendChild(semente);
-
-    setTimeout(()=>{
-
-        semente.innerHTML = "🌽";
-        semente.className = "planta";
-
-        pontos += 10;
-        plantadas++;
-
-        document.getElementById("pontos").textContent = pontos;
-        document.getElementById("plantadas").textContent = plantadas;
-
-        mostrarDica();
-
-    },2000);
+    requestAnimationFrame(atualizar);
 }
 
-const dicas = [
-"🌽 O milho é uma das culturas mais importantes da agricultura familiar.",
-"🍅 Hortaliças frescas abastecem feiras e mercados locais.",
-"💧 A irrigação ajuda a aumentar a produção.",
-"🌱 O uso de adubos orgânicos melhora o solo.",
-"🐝 As abelhas ajudam na polinização das plantas.",
-"🌳 Preservar matas protege nascentes e rios.",
-"🚜 O trator reduz o esforço do agricultor.",
-"🥬 A agricultura familiar produz alimentos saudáveis.",
-"♻️ A sustentabilidade garante produção para o futuro.",
-"👨‍🌾 Pequenos produtores são fundamentais para a economia."
+atualizar();
+
+function plantarAutomatico(){
+
+    if(
+       teclas["w"] ||
+       teclas["a"] ||
+       teclas["s"] ||
+       teclas["d"]
+    ){
+
+        const planta = document.createElement("div");
+
+        planta.className = "planta";
+        planta.innerHTML = "🌱";
+
+        planta.style.left = (x+15)+"px";
+        planta.style.top = (y+15)+"px";
+
+        campo.appendChild(planta);
+
+        setTimeout(()=>{
+
+            const culturas = [
+                "🌽","🍅","🥬","🥕","🫘"
+            ];
+
+            planta.innerHTML =
+            culturas[Math.floor(Math.random()*culturas.length)];
+
+            pontos += 5;
+            moedas += 2;
+            totalPlantas++;
+
+            producao += Math.floor(Math.random()*15)+5;
+
+            if(totalPlantas % 20 === 0){
+                nivel++;
+                mostrarMensagem(
+                  "⭐ Você alcançou o nível " + nivel
+                );
+            }
+
+            atualizarPainel();
+
+        },3000);
+    }
+}
+
+setInterval(plantarAutomatico,500);
+
+function atualizarPainel(){
+
+    document.getElementById("pontos").textContent = pontos;
+    document.getElementById("moedas").textContent = moedas;
+    document.getElementById("nivel").textContent = nivel;
+    document.getElementById("plantas").textContent = totalPlantas;
+    document.getElementById("producao").textContent = producao;
+
+    if(producao >= 500){
+
+        mostrarMensagem(
+        "🏆 Meta concluída! A comunidade recebeu alimentos da agricultura familiar!"
+        );
+
+        producao = 0;
+    }
+}
+
+const curiosidades = [
+
+"🌱 A agricultura familiar produz cerca de grande parte dos alimentos consumidos localmente.",
+"🚜 O trator reduz o esforço físico e aumenta a eficiência.",
+"💧 A irrigação ajuda no crescimento das plantas.",
+"🌳 Preservar florestas protege os rios.",
+"🐝 Abelhas ajudam na polinização.",
+"🥬 Hortaliças frescas são importantes para a alimentação saudável.",
+"♻️ A produção sustentável protege o meio ambiente.",
+"🌽 O milho é uma das culturas mais cultivadas no Brasil.",
+"🍅 O tomate é rico em vitaminas.",
+"👨‍🌾 Pequenos agricultores fortalecem a economia local."
+
 ];
 
-function mostrarDica(){
+function mostrarMensagem(texto){
 
-    const caixa = document.createElement("div");
+    const msg = document.getElementById("mensagem");
 
-    caixa.style.position = "absolute";
-    caixa.style.bottom = "20px";
-    caixa.style.left = "50%";
-    caixa.style.transform = "translateX(-50%)";
-    caixa.style.background = "white";
-    caixa.style.padding = "10px";
-    caixa.style.borderRadius = "10px";
-    caixa.style.fontWeight = "bold";
-
-    caixa.innerHTML =
-        dicas[Math.floor(Math.random()*dicas.length)];
-
-    game.appendChild(caixa);
+    msg.innerHTML = texto;
+    msg.style.display = "block";
 
     setTimeout(()=>{
-        caixa.remove();
-    },3000);
+        msg.style.display = "none";
+    },4000);
 }
 
 setInterval(()=>{
 
-    if(pontos >= 100){
+    const texto =
+    curiosidades[
+        Math.floor(Math.random()*curiosidades.length)
+    ];
 
-        alert(
-        "🏆 Parabéns!\n" +
-        "Você ajudou a agricultura familiar a produzir alimentos para a comunidade!"
-        );
+    mostrarMensagem(texto);
 
-        pontos = 0;
-        plantadas = 0;<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agricultura Familiar - Mini Game</title>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#87CEEB;
-    overflow:hidden;
-}
-
-#game{
-    width:100vw;
-    height:100vh;
-    position:relative;
-    background:linear-gradient(#87CEEB 50%, #5cae4f 50%);
-}
-
-#trator{
-    position:absolute;
-    width:80px;
-    height:50px;
-    font-size:50px;
-    left:50px;
-    top:300px;
-}
-
-.semente{
-    position:absolute;
-    font-size:25px;
-}
-
-.planta{
-    position:absolute;
-    font-size:30px;
-}
-
-#painel{
-    position:absolute;
-    top:10px;
-    left:10px;
-    background:white;
-    padding:10px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.3);
-}
-
-#info{
-    position:absolute;
-    right:10px;
-    top:10px;
-    width:320px;
-    background:white;
-    padding:10px;
-    border-radius:10px;
-    max-height:90vh;
-    overflow:auto;
-}
-
-h2{
-    margin-top:0;
-}
-</style>
-</head>
-<body>
-
-<div id="game">
-
-<div id="painel">
-    <h3>🚜 Agricultura Familiar</h3>
-    <p>Pontos: <span id="pontos">0</span></p>
-    <p>Sementes Plantadas: <span id="plantadas">0</span></p>
-    <p>Use ↑ ↓ ← → para mover</p>
-    <p>Pressione ESPAÇO para plantar</p>
-</div>
-
-<div id="info">
-    <h2>🌱 Informações</h2>
-
-    <p><b>Agricultura Familiar</b> é responsável por grande parte dos alimentos consumidos pela população.</p>
-
-    <ul>
-        <li>🥬 Produz verduras e legumes.</li>
-        <li>🌽 Cultiva milho e feijão.</li>
-        <li>🍅 Produz tomate e hortaliças.</li>
-        <li>🐄 Pode criar animais de pequeno porte.</li>
-        <li>💧 Utiliza recursos naturais de forma sustentável.</li>
-        <li>👨‍👩‍👧‍👦 Gera emprego para famílias rurais.</li>
-        <li>🌳 Ajuda na preservação ambiental.</li>
-        <li>🚜 O trator auxilia no preparo do solo e plantio.</li>
-    </ul>
-
-    <h3>Missão</h3>
-    <p>Ajude o agricultor a plantar o maior número possível de sementes para abastecer a comunidade.</p>
-</div>
-
-<div id="trator">🚜</div>
-
-</div>
-
-<script>
-const trator = document.getElementById("trator");
-const game = document.getElementById("game");
-
-let x = 50;
-let y = 300;
-
-let pontos = 0;
-let plantadas = 0;
-
-document.addEventListener("keydown", (e)=>{
-
-    if(e.key === "ArrowRight") x += 15;
-    if(e.key === "ArrowLeft") x -= 15;
-    if(e.key === "ArrowUp") y -= 15;
-    if(e.key === "ArrowDown") y += 15;
-
-    if(x < 0) x = 0;
-    if(y < 150) y = 150;
-    if(x > window.innerWidth - 100) x = window.innerWidth - 100;
-    if(y > window.innerHeight - 80) y = window.innerHeight - 80;
-
-    trator.style.left = x + "px";
-    trator.style.top = y + "px";
-
-    if(e.code === "Space"){
-        plantar();
-    }
-});
-
-function plantar(){
-
-    const semente = document.createElement("div");
-    semente.className = "semente";
-    semente.innerHTML = "🌱";
-
-    semente.style.left = (x+25)+"px";
-    semente.style.top = (y+25)+"px";
-
-    game.appendChild(semente);
-
-    setTimeout(()=>{
-
-        semente.innerHTML = "🌽";
-        semente.className = "planta";
-
-        pontos += 10;
-        plantadas++;
-
-        document.getElementById("pontos").textContent = pontos;
-        document.getElementById("plantadas").textContent = plantadas;
-
-        mostrarDica();
-
-    },2000);
-}
-
-const dicas = [
-"🌽 O milho é uma das culturas mais importantes da agricultura familiar.",
-"🍅 Hortaliças frescas abastecem feiras e mercados locais.",
-"💧 A irrigação ajuda a aumentar a produção.",
-"🌱 O uso de adubos orgânicos melhora o solo.",
-"🐝 As abelhas ajudam na polinização das plantas.",
-"🌳 Preservar matas protege nascentes e rios.",
-"🚜 O trator reduz o esforço do agricultor.",
-"🥬 A agricultura familiar produz alimentos saudáveis.",
-"♻️ A sustentabilidade garante produção para o futuro.",
-"👨‍🌾 Pequenos produtores são fundamentais para a economia."
-];
-
-function mostrarDica(){
-
-    const caixa = document.createElement("div");
-
-    caixa.style.position = "absolute";
-    caixa.style.bottom = "20px";
-    caixa.style.left = "50%";
-    caixa.style.transform = "translateX(-50%)";
-    caixa.style.background = "white";
-    caixa.style.padding = "10px";
-    caixa.style.borderRadius = "10px";
-    caixa.style.fontWeight = "bold";
-
-    caixa.innerHTML =
-        dicas[Math.floor(Math.random()*dicas.length)];
-
-    game.appendChild(caixa);
-
-    setTimeout(()=>{
-        caixa.remove();
-    },3000);
-}
+},12000);
 
 setInterval(()=>{
 
-    if(pontos >= 100){
+    mostrarMensagem(
+    "🌧️ Chuva chegando! Crescimento acelerado das plantas."
+    );
 
-        alert(
-        "🏆 Parabéns!\n" +
-        "Você ajudou a agricultura familiar a produzir alimentos para a comunidade!"
-        );
+    pontos += 20;
+    moedas += 10;
 
-        pontos = 0;
-        plantadas = 0;
+    atualizarPainel();
 
-        document.getElementById("pontos").textContent = 0;
-        document.getElementById("plantadas").textContent = 0;
-    }
+},30000);
 
-},1000);
-</script>
-
-</body>
-</html>
-
-        document.getElementById("pontos").textContent = 0;
-        document.getElementById("plantadas").textContent = 0;
-    }
-
-},1000);
 </script>
 
 </body>
